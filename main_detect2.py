@@ -1,18 +1,21 @@
 import os
-os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
+
+os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 import datetime
-from ultralytics import YOLO
 import shutil
-from pathlib import Path
-import numpy as np   
-from tqdm import tqdm
 from collections import defaultdict
+from pathlib import Path
+
+import numpy as np
+from tqdm import tqdm
+from ultralytics import YOLO
+
 
 def setup_logging_start():
     """设置并打印程序开始日志."""
     start_time = datetime.datetime.now()
     print(f"程序开始运行时间: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"开始训练 YOLO 模型...")
+    print("开始训练 YOLO 模型...")
     print("-" * 50)
     return start_time
 
@@ -25,18 +28,21 @@ def setup_logging_end(start_time):
     print(f"训练完成时间: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"总训练耗时: {total_time}")
 
+
 def delete_ipynb_checkpoints(root_dir):
-    """删除 .ipynb_checkpoints / .cache"""
+    """删除 .ipynb_checkpoints / .cache."""
     print("【执行 delete_ipynb_checkpoints()】")
     for dirpath, dirnames, filenames in os.walk(root_dir, topdown=False):
-        if os.path.basename(dirpath) == '.ipynb_checkpoints':
+        if os.path.basename(dirpath) == ".ipynb_checkpoints":
             print(f"【Deleting】: {dirpath}")
             shutil.rmtree(dirpath)
-        elif os.path.basename(dirpath) == '.cache':
+        elif os.path.basename(dirpath) == ".cache":
             print(f"【Deleting】: {dirpath}")
             shutil.rmtree(dirpath)
 
+
 # ---------------------------------------------------------------------------------------------
+
 
 def run_detection_training(model, data, save_name="train"):
     """封装检测训练代码."""
@@ -91,16 +97,7 @@ def run_detection_prediction(checkpoint, predict_data, save_name="predict", conf
     print("-" * 50)
 
 
-from tqdm import tqdm
-from collections import defaultdict
-
-def run_detection_prediction_power(
-        checkpoint,
-        predict_data,
-        conf=0.1,
-        low_conf_threshold=0.5,
-        save_path="./save"):
-
+def run_detection_prediction_power(checkpoint, predict_data, conf=0.1, low_conf_threshold=0.5, save_path="./save"):
     print("--------------【运行检测预测】--------------")
     model = YOLO(checkpoint)
 
@@ -119,13 +116,7 @@ def run_detection_prediction_power(
     stats = defaultdict(int)
 
     # YOLO 保存带框图到：xxx_split/xxx-predict/
-    results = model.predict(
-        predict_data,
-        save=True,
-        conf=conf,
-        project=save_path,
-        name=f"{base_name}-predict"
-    )
+    results = model.predict(predict_data, save=True, conf=conf, project=save_path, name=f"{base_name}-predict")
 
     # 把 predict_data 当作“原图所在目录”
     predict_data_dir = Path(predict_data)
@@ -215,16 +206,15 @@ def run_detection_prediction_power(
 
 # -------------------------------------------------------------------------------------------------------------
 
+
 def main():
     start_time = setup_logging_start()
 
-    model = "yolo11m"
     version = "v10.1"
 
-    data = r"/root/autodl-tmp/ultralytics-main/datas/WX_class/v7/v7.3/v7.3_split/data.yaml"
-    predict_data = r"/root/autodl-tmp/ultralytics-main/datas/WX_class/test/11-20/20_ng_91"
+    data = r"/root/autodl-tmp/ultralytics-main/data/WX_class/v7/v7.3/v7.3_split/data.yaml"
+    predict_data = r"/root/autodl-tmp/ultralytics-main/data/WX_class/test/11-20/20_ng_91"
     checkpoint = f"/root/autodl-tmp/ultralytics-main/runs/detect/{version}/weights/best.pt"
-
 
     delete_ipynb_checkpoints(os.path.dirname(data))
 
@@ -233,7 +223,7 @@ def main():
         predict_data,
         conf=0.1,
         low_conf_threshold=0.7,
-        save_path=r"/root/autodl-tmp/ultralytics-main/datas/WX_class/test/11-20",
+        save_path=r"/root/autodl-tmp/ultralytics-main/data/WX_class/test/11-20",
     )
 
     setup_logging_end(start_time)

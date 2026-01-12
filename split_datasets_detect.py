@@ -1,6 +1,5 @@
-import os
-import shutil
 import random
+import shutil
 from pathlib import Path
 
 random.seed(0)
@@ -14,21 +13,17 @@ def split_data(
     val_rate=0.2,
     test_rate=0.0,
 ):
-    """
-    将 image_dir / label_dir 下的数据划分为 train / val (/ test) 并复制到 out_dir。
+    """将 image_dir / label_dir 下的数据划分为 train / val (/ test) 并复制到 out_dir。.
 
-    目标目录结构：
-    out_dir/
-      images/
+    目标目录结构： out_dir/ images/
         train/
         val/
         test/   # 仅当 test_rate > 0 时创建
-      labels/
+    labels/
         train/
         val/
         test/   # 仅当 test_rate > 0 时创建
     """
-
     image_dir = Path(image_dir)
     label_dir = Path(label_dir)
     out_dir = Path(out_dir)
@@ -96,11 +91,10 @@ def split_data(
 
 
 if __name__ == "__main__":
-    base_path = r"/root/autodl-tmp/ultralytics-main/datas/WX_class/v10/v10.5"
+    base_path = r"/root/autodl-tmp/ultralytics-main/data/WX_class/v10/v10.5"
     new_file_path = base_path + "/v10.5_split"
     file_path = base_path + "/images"
     txt_path = base_path + "/labels"
-    
+
     # 默认：只有 train/val
     split_data(file_path, txt_path, new_file_path, train_rate=0.7, val_rate=0.2, test_rate=0.1)
-
