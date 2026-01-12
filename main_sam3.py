@@ -12,7 +12,7 @@ overrides = dict(
 predictor = SAM3SemanticPredictor(overrides=overrides)
 
 # Set image once for multiple queries
-predictor.set_image("/root/autodl-tmp/ultralytics-main/datas/mirror/G01-1.png")
+predictor.set_image("/root/autodl-tmp/ultralytics-main/data/mirror/G01-1.png")
 
 # Query with multiple text prompts
 results = predictor(text=["Gold wire reflection", "dirt"])

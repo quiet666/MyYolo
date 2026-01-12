@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-import os
-from pathlib import Path
 import shutil
+from pathlib import Path
+
 import cv2
 import torch
 from ultralytics import YOLO
 
 # ===================== 配置区 =====================
 MODEL_PATH = "/root/autodl-tmp/ultralytics-main/runs/classify/train8/weights/best.pt"  # 你的分类模型 .pt
-VAL_DIR = Path("/root/autodl-tmp/ultralytics-main/datas/WX_class/defect_all2_split/val")  # 形如 val/0_xxx, val/1_xxx ...
+VAL_DIR = Path(
+    "/root/autodl-tmp/ultralytics-main/data/WX_class/defect_all2_split/val"
+)  # 形如 val/0_xxx, val/1_xxx ...
 INCORRECT_DIR = Path("/root/autodl-tmp/ultralytics-main/runs/classify/predict_defect_all/save_incorrect")  # 修改路径
 
 if INCORRECT_DIR.exists():
@@ -17,9 +19,11 @@ if INCORRECT_DIR.exists():
 INCORRECT_DIR.mkdir(parents=True, exist_ok=True)  # 支持的图片扩展名
 IMG_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"}
 
+
 # =================================================
 def is_image(p: Path) -> bool:
     return p.is_file() and p.suffix.lower() in IMG_EXTS
+
 
 def main():
     # 加载模型（分类模型）
@@ -75,7 +79,7 @@ def main():
                     continue
 
                 # 获取图片尺寸
-                h, w = img.shape[:2]
+                _h, _w = img.shape[:2]
 
                 # 文字绘制设置：改进字体颜色和行间距
                 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -114,6 +118,7 @@ def main():
         print(f"{class_name}: {count} 张")
 
     print(f"已处理并保存错误分类的图片，路径：{INCORRECT_DIR}")
+
 
 if __name__ == "__main__":
     main()
