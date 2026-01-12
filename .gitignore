@@ -181,5 +181,5 @@ calibration_*.npy
 datas/
 logs/
 runs/
-*.pt
+# *.pt
 autodl-tmp/
